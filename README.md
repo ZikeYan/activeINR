@@ -82,7 +82,6 @@ The repo is still under construction, thanks for your patience.
 - [ ] Running with a live camera in ROS.
 - [ ] BALD implementation.  
 - [ ] Loss landscape visualization.
-- [ ] 
 
 
 ## Acknowledgement
