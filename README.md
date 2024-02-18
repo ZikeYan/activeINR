@@ -22,7 +22,7 @@ Our environment has been tested on Ubuntu 18.04 (CUDA 10.8 with RTX2080Ti) & 20.
 Clone the repo and create conda environment
 
 ```shell
-git clone .git && cd activeINR
+git clone https://github.com/ZikeYan/activeINR.git && cd activeINR
 
 # create conda env
 conda env create -f environment.yml
