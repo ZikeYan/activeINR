@@ -1,3 +1,4 @@
+
 results/
 *.png
 *.txt
@@ -11,3 +12,5 @@ activeINR/local_policy_models/
 __pycache__/
 *.py[cod]
 *$py.class
+
+*.egg-info/
