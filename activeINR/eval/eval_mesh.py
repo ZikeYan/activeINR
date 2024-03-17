@@ -1,14 +1,24 @@
-import torch
 import numpy as np
-import os
 
 import open3d as o3d
 import trimesh
+from scipy.spatial import KDTree
+import argparse
+import json
 
-scene_id = "Denmark"
-gt_folder = "/home/yan/Dataset/gibson_habitat/gibson/"
-gt_mesh_file = gt_folder + scene_id + "/" + scene_id + "_mesh.ply"
-ours_file = "logs/final/gibson/" + scene_id + "/step+_0/mesh.ply"
+parser = argparse.ArgumentParser(description="NExplore.")
+parser.add_argument("--config", type=str, required=True, help="input json config")
+parser.add_argument("--file", default="None", help="recorded mesh")
+parser.add_argument("--scene_id", default="None", help="specify test scene")
+parser.add_argument("--visualize", action="store_true", default=False, help="visualize the mesh")
+args, _ = parser.parse_known_args()  # ROS adds extra unrecongised args
+scene_id = args.scene_id
+with open(args.config) as f:
+    config = json.load(f)
+    gt_folder = config["dataset"]["root"]
+
+gt_mesh_file = gt_folder + scene_id + ".glb"
+ours_file = args.file
 
 our_mesh = o3d.io.read_triangle_mesh(ours_file)
 our_mesh.paint_uniform_color([1, 0.706, 0])
@@ -21,7 +31,8 @@ T_rot[1, 1], T_rot[2, 2] = 0, 0
 T_rot[1, 2], T_rot[2, 1] = -1, 1
 T_rot[1, 3] = 1.25
 gt_mesh.transform(T_rot)
-o3d.visualization.draw_geometries([our_mesh, gt_mesh])
+if args.visualize:
+    o3d.visualization.draw_geometries([our_mesh, gt_mesh])
 
 our_tri_mesh = trimesh.Trimesh(np.asarray(our_mesh.vertices), np.asarray(our_mesh.triangles))
 gt_tri_mesh= trimesh.Trimesh(np.asarray(gt_mesh.vertices), np.asarray(gt_mesh.triangles))
@@ -53,13 +64,19 @@ def accuracy_comp_ratio(mesh_gt, mesh_rec, samples=200000):
         comp = np.mean(distances)
         return distances, comp
 
-    acc = accuracy(gt_pc_tri.vertices, rec_pc_tri.vertices)
-    comp = completion(gt_pc_tri.vertices, rec_pc_tri.vertices)
-    ratio = completion_ratio(gt_pc_tri.vertices, rec_pc_tri.vertices)
+    _, acc = accuracy(gt_pc_tri.vertices, rec_pc_tri.vertices)
+    _, comp = completion(gt_pc_tri.vertices, rec_pc_tri.vertices)
+    _, ratio = completion_ratio(gt_pc_tri.vertices, rec_pc_tri.vertices)
 
     return acc, comp, ratio
 
 acc, comp, ratio = accuracy_comp_ratio(gt_tri_mesh, our_tri_mesh)
 iacc, icomp, iratio = accuracy_comp_ratio(our_tri_mesh, gt_tri_mesh)
-print(acc, comp, 1-ratio)
-print(iacc, icomp, 1-iratio)
+# acc: ACC
+# 1-iratio: FPR
+# print(acc, comp, 1-ratio)
+# print(iacc, icomp, 1-iratio)
+
+print(f"ACC: {acc*100:.2f}, FPR: {(1-iratio)*100:.2f}")
+with open(ours_file + ".txt", "w") as result_file:
+    result_file.write(f"ACC: {acc*100:.2f}, FPR: {(1-iratio)*100:.2f}")

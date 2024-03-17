@@ -12,12 +12,13 @@
  	<a href='https://www.youtube.com/watch?v=psPvanfh7SA&feature=youtu.be'><img src='https://img.shields.io/badge/Youtube-Video-blue'></a>
 </div>
 
+## Update
 
-
+- [x] We speed up the completeness evaluation through parallel computation. [2024.03.17]
 
 ## Installation
 
-Our environment has been tested on Ubuntu 18.04 (CUDA 10.8 with RTX2080Ti) & 20.04 (CUDA 11.8 with RTX4080).
+Our environment has been tested on Ubuntu 18.04 (CUDA 10.2 with RTX2080Ti) and Ubuntu 20.04(CUDA 10.2/11.3 with RTX2080Ti). Torch1.12.1 is recommended to reproduce the results.
 
 Clone the repo and create conda environment
 
@@ -29,11 +30,10 @@ conda env create -f environment.yml
 conda activate activeINR
 ```
 
-Install pytorch by following the [instructions](https://pytorch.org/get-started/locally/). For torch 2.0.1 with CUDA version 11.8:
+Install pytorch by following the [instructions](https://pytorch.org/get-started/locally/). 
 
 ```shell
-
-pip install torch==2.0.1+cu118 torchvision==0.15.2+cu118 torchaudio==2.0.2+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+pip install torch==1.12.1+cu102 torchvision==0.13.1+cu102 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu102
 
 pip install -e .
 ```
@@ -42,11 +42,11 @@ pip install -e .
 
 #### Simulated environment
 
-[Habitat-lab](https://github.com/facebookresearch/habitat-lab) and [habitat-sim](https://github.com/facebookresearch/habitat-sim) need to be installed for simulation. We use v0.1.7 (`git checkout tags/v0.1.7)` and install the habitat-sim with the flag `--with-cuda`.
+[Habitat-lab](https://github.com/facebookresearch/habitat-lab) and [habitat-sim](https://github.com/facebookresearch/habitat-sim) need to be installed for simulation. We use v0.1.7 `(git checkout tags/v0.1.7)` and install the habitat-sim with the flag `--with-cuda`.
 
 ```shell
 pip install -e habitat-lab
-python habitat-sim/setup.py install --with-cuda
+cd habitat-sim && python setup.py install --with-cuda
 ```
 
 #### Data
@@ -82,7 +82,6 @@ The repo is still under construction, thanks for your patience.
 - [ ] Running with a live camera in ROS.
 - [ ] BALD implementation.  
 - [ ] Loss landscape visualization.
-- [ ] 
 
 
 ## Acknowledgement

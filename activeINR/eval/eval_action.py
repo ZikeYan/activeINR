@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 import torch
 import numpy as np
-import json
 import os
-from datetime import datetime
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir)))
 import argparse
-import cv2
+from PIL import ImageFile, Image
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+Image.MAX_IMAGE_PIXELS = None
 
-import open3d.visualization.gui as gui
 from activeINR.eval import eval_window
 from activeINR.modules import mapping
 from activeINR.modules import navigation
@@ -39,15 +40,9 @@ if __name__ == "__main__":
         scene_id=scene_id
         )
 
-    # open3d vis window --------------------------------------------------------
-    app = gui.Application.instance
-    app.initialize()
-    mono = app.add_font(gui.FontDescription(gui.FontDescription.MONOSPACE))
     w = eval_window.EvaWindow(
         trainer,
         explorer,
         mapping.mapper,
-        mono,
         args.file
     )
-    app.run()
