@@ -13,7 +13,9 @@
 </div>
 
 ## Update
-
+- [x] Please check our updated version: [ActiveSplat: High-Fidelity Scene Reconstruction
+through Active Gaussian Splatting](https://li-yuetao.github.io/ActiveSplat/). [2024.10.29]
+- [x] Please check the code of our follow-up work: [Active Neural Mapping at Scale](https://github.com/kzj18/activeINR-S). Same guidance through weight perturbation but with better planner and mapping backbone to achieve complete exploration and accurate reconstruction. [2024.10.01]
 - [x] We speed up the completeness evaluation through parallel computation. [2024.03.17]
 
 ## Installation
